@@ -100,8 +100,8 @@ product (x :. xs) = x * product xs
 sum ::
   List Int
   -> Int
-sum =
-  error "todo"
+sum Nil = 0
+sum (x :. xs) = x + sum xs
 
 -- | Return the length of the list.
 --
@@ -112,8 +112,8 @@ sum =
 length ::
   List a
   -> Int
-length =
-  error "todo"
+length (Nil) = 0
+length (x) = sum(map (const 1) x)
 
 -- | Map the given function on each element of the list.
 --
@@ -127,8 +127,8 @@ map ::
   (a -> b)
   -> List a
   -> List b
-map =
-  error "todo"
+map _ Nil = Nil
+map fn (x :. xs) = fn x :. map fn xs
 
 -- | Return elements satisfying the given predicate.
 --
@@ -144,8 +144,10 @@ filter ::
   (a -> Bool)
   -> List a
   -> List a
-filter =
-  error "todo"
+filter _ Nil = Nil
+filter p (x :. xs)
+  | p x = x :. filter p xs
+  | otherwise = filter p xs
 
 -- | Append two lists to a new list.
 --
@@ -163,10 +165,11 @@ filter =
   List a
   -> List a
   -> List a
-(++) =
-  error "todo"
-
+Nil ++ ys = ys
+(x :. xs) ++ ys = x :. (xs ++ ys)
+  
 infixr 5 ++
+
 
 -- | Flatten a list of lists to a list.
 --
@@ -181,8 +184,7 @@ infixr 5 ++
 flatten ::
   List (List a)
   -> List a
-flatten =
-  error "todo"
+flatten = foldRight (++) Nil
 
 -- | Map a function then flatten to a list.
 --
